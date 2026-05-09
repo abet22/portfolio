@@ -1,14 +1,14 @@
 // Portfolio data — Albert González
 window.PORTFOLIO_DATA = {
   "name": "Albert",
-  "surname": "González2",
+  "surname": "González",
   "role": "Software Engineer",
   "tagline": "Full-stack engineer crafting reliable systems and beautiful interfaces — with a soft spot for cloud infrastructure on Azure.",
   "location": "Spain",
   "yearsCoding": 5,
   "email": "albertbraojos03@gmail.com",
-  "github": "github.com/albertgonzalez",
-  "linkedin": "linkedin.com/in/albertgonzalez",
+  "github": "https://github.com/abet22",
+  "linkedin": "https://www.linkedin.com/in/albert-gonzalez-braojos/",
   "about": [
     "I'm a Computer Science student in my final year, focused on **full-stack development** and **DevOps practices** built around Microsoft Azure. I enjoy the seam where well-designed UI meets resilient backend systems.",
     "I write a lot of **TypeScript** and **C#**, dip into **C++** for performance work, and treat infrastructure-as-code as a craft of its own. Outside the editor, I'm fascinated by interaction design and how a single transition can make software feel alive.",
