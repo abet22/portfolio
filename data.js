@@ -152,16 +152,17 @@ window.PORTFOLIO_DATA = {
   ],
   "experience": [
     {
-      "date": "Jun 2025 — Present",
-      "role": "Software Engineering Intern",
-      "company": "Cloud Solutions Team",
+      "date": "Oct 2025 — Present",
+      "role": "Full stack developer",
+      "company": "Raona",
       "desc": "Building internal tools on Azure: Function Apps for event-driven workflows, React dashboards for ops, and Terraform modules to standardise environments across the team.",
       "tags": [
         "Azure",
         ".NET",
         "React",
         "Terraform"
-      ]
+      ],
+      "logo": "assets/images-1778360639928.jpg"
     },
     {
       "date": "Sep 2024 — May 2025",
