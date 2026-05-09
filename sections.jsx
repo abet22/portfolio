@@ -218,7 +218,10 @@ function Projects({ data }) {
             <article className="project-card">
               <div className="project-inner">
                 <div className={`project-visual ${p.visual}`}>
-                  <ProjectMock variant={p.visual} />
+                  {p.image
+                    ? <img src={p.image} alt={p.title} className="project-img" />
+                    : <ProjectMock variant={p.visual} />
+                  }
                 </div>
                 <div className="project-info">
                   <div className="project-num">{p.num} · {p.year}</div>
@@ -255,7 +258,13 @@ function Experience({ data }) {
         {data.experience.map((e, i) => (
           <div className="timeline-item" key={i}>
             <div className="timeline-date">{e.date}</div>
-            <h3 className="timeline-role">{e.role} <span className="timeline-company">· {e.company}</span></h3>
+            <h3 className="timeline-role">
+              {e.role}{' '}
+              <span className="timeline-company">
+                {e.logo && <img src={e.logo} className="timeline-logo" alt={e.company} />}
+                · {e.company}
+              </span>
+            </h3>
             <p className="timeline-desc">{e.desc}</p>
             <div className="timeline-tags">
               {e.tags.map((t, j) => <span key={j}>{t}</span>)}
@@ -280,6 +289,7 @@ function EducationAwards({ data }) {
           <div className="block-title">Education</div>
           {data.education.map((e, i) => (
             <div className="edu-card" key={i}>
+              {e.logo && <img src={e.logo} className="edu-logo" alt={e.school} />}
               <div className="edu-school">{e.school}</div>
               <div className="edu-degree">{e.degree}</div>
               <div className="edu-meta">{e.meta}</div>
