@@ -1,7 +1,7 @@
 // Portfolio data — Albert González
 window.PORTFOLIO_DATA = {
   "name": "Albert",
-  "surname": "González",
+  "surname": "González2",
   "role": "Software Engineer",
   "tagline": "Full-stack engineer crafting reliable systems and beautiful interfaces — with a soft spot for cloud infrastructure on Azure.",
   "location": "Spain",
