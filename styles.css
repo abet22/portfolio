@@ -115,6 +115,24 @@ a, button, [data-cursor="hover"] { cursor: pointer; }
 .nav-links a:hover { color: var(--fg); }
 @media (max-width: 720px) { .nav-links { display: none; } }
 
+.lang-switcher { display: flex; gap: 2px; }
+.lang-btn {
+  padding: 4px 9px;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  background: transparent;
+  color: var(--fg-muted);
+  cursor: pointer;
+  transition: all 0.18s;
+  line-height: 1;
+}
+.lang-btn:hover { color: var(--fg); }
+.lang-btn.active { background: var(--code); color: var(--fg); border-color: var(--line); }
+
 /* Sections */
 section { position: relative; }
 

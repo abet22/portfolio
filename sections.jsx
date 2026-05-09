@@ -1,18 +1,26 @@
-/* global React, Reveal, Magnetic, HeroCanvas */
+/* global React, Reveal, Magnetic, HeroCanvas, i18n */
 const { useEffect, useRef, useState } = React;
 
 // ============ Nav ============
-function Nav({ data }) {
+function Nav({ data, locale, onLocaleChange }) {
+  const t = k => i18n.t(k);
   return (
     <nav className="nav">
       <div className="nav-inner">
         <div className="nav-brand">{data.name} {data.surname}.</div>
         <div className="nav-links">
-          <a href="#about">About</a>
-          <a href="#skills">Skills</a>
-          <a href="#projects">Work</a>
-          <a href="#experience">Experience</a>
-          <a href="#contact">Contact</a>
+          <a href="#about">{t('nav.about')}</a>
+          <a href="#skills">{t('nav.skills')}</a>
+          <a href="#projects">{t('nav.work')}</a>
+          <a href="#experience">{t('nav.experience')}</a>
+          <a href="#contact">{t('nav.contact')}</a>
+        </div>
+        <div className="lang-switcher">
+          {['en','es','ca'].map(l => (
+            <button key={l} className={`lang-btn ${locale === l ? 'active' : ''}`} onClick={() => onLocaleChange(l)}>
+              {l.toUpperCase()}
+            </button>
+          ))}
         </div>
       </div>
     </nav>
@@ -20,36 +28,39 @@ function Nav({ data }) {
 }
 
 // ============ Hero ============
-function Hero({ data }) {
+function Hero({ data, locale }) {
+  const t = k => i18n.t(k);
   return (
     <section className="hero">
       <HeroCanvas />
-      <div className="hero-eyebrow">{data.role} · {data.location}</div>
+      <div className="hero-eyebrow">{i18n.tc(data.role)} · {data.location}</div>
       <h1 className="hero-title">
         <span className="word">{data.name}</span>{' '}
         <span className="word">{data.surname}.</span>
       </h1>
-      <p className="hero-subtitle">{data.tagline}</p>
+      <p className="hero-subtitle">{i18n.tc(data.tagline)}</p>
       <div className="hero-meta">
-        <span><b>Available</b> · Graduate roles 2026</span>
-        <span><b>Based</b> · {data.location}</span>
+        <span><b>{t('hero.available')}</b> · {t('hero.available_for')}</span>
+        <span><b>{t('hero.based')}</b> · {data.location}</span>
       </div>
-      <div className="hero-scroll">Scroll</div>
+      <div className="hero-scroll">{t('hero.scroll')}</div>
     </section>
   );
 }
 
 // ============ About ============
-function About({ data }) {
+function About({ data, locale }) {
+  const t = k => i18n.t(k);
+  const paragraphs = i18n.tc(data.about);
   return (
     <section className="section" id="about">
       <Reveal>
-        <div className="section-eyebrow">About</div>
-        <h2 className="section-title">Engineer who sweats the details.</h2>
+        <div className="section-eyebrow">{t('about.eyebrow')}</div>
+        <h2 className="section-title">{t('about.heading')}</h2>
       </Reveal>
       <div className="about-grid" style={{ marginTop: 60 }}>
         <Reveal as="div" className="about-text">
-          {data.about.map((p, i) => (
+          {paragraphs.map((p, i) => (
             <p key={i} dangerouslySetInnerHTML={{ __html: p.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>') }} />
           ))}
         </Reveal>
@@ -57,7 +68,7 @@ function About({ data }) {
           {data.stats.map((s, i) => (
             <div className="stat" key={i}>
               <div className="stat-num">{s.num}</div>
-              <div className="stat-label">{s.label}</div>
+              <div className="stat-label">{i18n.tc(s.label)}</div>
             </div>
           ))}
         </Reveal>
@@ -67,38 +78,36 @@ function About({ data }) {
 }
 
 // ============ Skills ============
-function Skills({ data }) {
-  // Duplicate items so the marquee loops seamlessly
+function Skills({ data, locale }) {
+  const t = k => i18n.t(k);
   const items = [...data.skillsMarquee, ...data.skillsMarquee];
+  const catLabel = (label) => {
+    const map = { 'Languages': t('skills.lang'), 'Frontend': t('skills.frontend'), 'Backend': t('skills.backend'), 'Cloud / DevOps': t('skills.cloud') };
+    return map[label] ?? label;
+  };
   return (
     <section className="skills-section" id="skills">
       <div className="section-head">
         <Reveal>
-          <div className="section-eyebrow">Toolkit</div>
-          <h2 className="section-title">Stack I reach for.</h2>
-          <p className="section-lead">From low-level C++ to cloud-native deployments — fluent in the full pipeline of building, shipping, and running modern software.</p>
+          <div className="section-eyebrow">{t('skills.eyebrow')}</div>
+          <h2 className="section-title">{t('skills.heading')}</h2>
+          <p className="section-lead">{t('skills.lead')}</p>
         </Reveal>
       </div>
-
       <div className="marquee-row">
         <div className="marquee">
-          {items.map((s, i) => (
-            <span className="skill-chip" key={'a' + i}><span className="dot"/>{s}</span>
-          ))}
+          {items.map((s, i) => <span className="skill-chip" key={'a'+i}><span className="dot"/>{s}</span>)}
         </div>
       </div>
       <div className="marquee-row">
         <div className="marquee reverse">
-          {items.map((s, i) => (
-            <span className="skill-chip" key={'b' + i}><span className="dot"/>{s}</span>
-          ))}
+          {items.map((s, i) => <span className="skill-chip" key={'b'+i}><span className="dot"/>{s}</span>)}
         </div>
       </div>
-
       <Reveal stagger className="skill-categories">
         {data.skillCategories.map((c, i) => (
           <div className="skill-cat" key={i}>
-            <div className="skill-cat-label">{c.label}</div>
+            <div className="skill-cat-label">{catLabel(c.label)}</div>
             <div className="skill-cat-list">
               {c.items.map((it, j) => <span key={j}>{it}</span>)}
             </div>
@@ -109,26 +118,18 @@ function Skills({ data }) {
   );
 }
 
-// ============ Project mockup (inside card) ============
-function ProjectMock({ variant }) {
+// ============ Project mockup ============
+function ProjectMock() {
   return (
     <div className="project-mock">
       <div className="mock-bar">
-        <div className="mock-dot" />
-        <div className="mock-dot" />
-        <div className="mock-dot" />
+        <div className="mock-dot"/><div className="mock-dot"/><div className="mock-dot"/>
       </div>
       <div className="mock-body">
-        <div className="mock-line l1" />
-        <div className="mock-line l2" />
-        <div className="mock-line l3" />
+        <div className="mock-line l1"/><div className="mock-line l2"/><div className="mock-line l3"/>
         <div className="mock-grid">
-          <div className="mock-tile accent" />
-          <div className="mock-tile" />
-          <div className="mock-tile" />
-          <div className="mock-tile" />
-          <div className="mock-tile accent" />
-          <div className="mock-tile" />
+          <div className="mock-tile accent"/><div className="mock-tile"/><div className="mock-tile"/>
+          <div className="mock-tile"/><div className="mock-tile accent"/><div className="mock-tile"/>
         </div>
       </div>
     </div>
@@ -136,7 +137,8 @@ function ProjectMock({ variant }) {
 }
 
 // ============ Pinned scroll showcase ============
-function PinnedShowcase({ data }) {
+function PinnedShowcase({ data, locale }) {
+  const t = k => i18n.t(k);
   const wrapperRef = useRef(null);
   const cardRef = useRef(null);
   const labelRef = useRef(null);
@@ -148,51 +150,50 @@ function PinnedShowcase({ data }) {
     const card = cardRef.current;
     if (!wrapper || !card) return;
 
-    const slides = [
-      { label: "Featured · 01", title: "OneMore", sub: "Full-stack productivity, deployed on Azure", bg: "linear-gradient(135deg,#0071e3,#0a4ad3)" },
-      { label: "Featured · 02", title: "Cloud Pipelines", sub: "Terraform-first, opinionated CI/CD", bg: "linear-gradient(135deg,#1d1d1f,#2d2d35)" },
-      { label: "Featured · 03", title: "Engine Lab", sub: "A graphics rabbit hole in modern C++", bg: "linear-gradient(135deg,#ff6b35,#f7931e)" },
-      { label: "Featured · 04", title: "Realtime Chat", sub: "SignalR, Redis, and a tidy React client", bg: "linear-gradient(135deg,#10b981,#047857)" }
-    ];
+    const slides = data.projects.map((p, i) => ({
+      label: `${t('work.featured')} · ${p.num}`,
+      title: p.title,
+      sub: i18n.tc(p.desc).split('.')[0] + '.',
+      bg: [
+        'linear-gradient(135deg,#0071e3,#0a4ad3)',
+        'linear-gradient(135deg,#1d1d1f,#2d2d35)',
+        'linear-gradient(135deg,#ff6b35,#f7931e)',
+        'linear-gradient(135deg,#10b981,#047857)'
+      ][i % 4]
+    }));
 
     const onScroll = () => {
       const rect = wrapper.getBoundingClientRect();
       const total = wrapper.offsetHeight - window.innerHeight;
       const scrolled = Math.min(Math.max(-rect.top, 0), total);
       const p = total > 0 ? scrolled / total : 0;
-
-      // Card subtle scale + rotate
       const rot = (p - 0.5) * 14;
       const scale = 0.9 + Math.sin(p * Math.PI) * 0.12;
       card.style.transform = `perspective(1400px) rotateY(${rot}deg) scale(${scale})`;
-
-      // Slide selection
-      const i = Math.min(slides.length - 1, Math.floor(p * slides.length));
-      const slide = slides[i];
-      if (labelRef.current && labelRef.current.dataset.idx !== String(i)) {
-        labelRef.current.dataset.idx = String(i);
+      const idx = Math.min(slides.length - 1, Math.floor(p * slides.length));
+      const slide = slides[idx];
+      if (labelRef.current && labelRef.current.dataset.idx !== String(idx)) {
+        labelRef.current.dataset.idx = String(idx);
         labelRef.current.textContent = slide.label;
         headlineRef.current.innerHTML = `${slide.title}<span>${slide.sub}</span>`;
         card.style.background = slide.bg;
       }
-      if (progRef.current) {
-        progRef.current.textContent = `${String(i + 1).padStart(2,'0')} / ${String(slides.length).padStart(2,'0')}`;
-      }
+      if (progRef.current) progRef.current.textContent = `${String(idx+1).padStart(2,'0')} / ${String(slides.length).padStart(2,'0')}`;
     };
     onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
-  }, []);
+  }, [locale]);
 
   return (
     <div ref={wrapperRef} className="showcase">
       <div className="showcase-sticky">
         <div ref={cardRef} className="showcase-card">
-          <div ref={labelRef} className="showcase-label" data-idx="0">Featured · 01</div>
+          <div ref={labelRef} className="showcase-label" data-idx="0">{t('work.featured')} · 01</div>
           <div ref={headlineRef} className="showcase-headline">
-            OneMore<span>Full-stack productivity, deployed on Azure</span>
+            {data.projects[0]?.title}<span>{i18n.tc(data.projects[0]?.desc).split('.')[0] + '.'}</span>
           </div>
-          <div ref={progRef} className="showcase-progress">01 / 04</div>
+          <div ref={progRef} className="showcase-progress">01 / 0{data.projects.length}</div>
         </div>
       </div>
     </div>
@@ -200,17 +201,18 @@ function PinnedShowcase({ data }) {
 }
 
 // ============ Projects grid ============
-function Projects({ data }) {
+function Projects({ data, locale }) {
+  const t = k => i18n.t(k);
   return (
     <>
       <section className="section" id="projects" style={{ paddingBottom: 60 }}>
         <Reveal>
-          <div className="section-eyebrow">Selected work</div>
-          <h2 className="section-title">Things I built, end to end.</h2>
+          <div className="section-eyebrow">{t('work.eyebrow')}</div>
+          <h2 className="section-title">{t('work.heading')}</h2>
         </Reveal>
       </section>
 
-      <PinnedShowcase data={data} />
+      <PinnedShowcase data={data} locale={locale} />
 
       <section className="section" style={{ paddingTop: 80 }}>
         {data.projects.map((p, i) => (
@@ -220,18 +222,18 @@ function Projects({ data }) {
                 <div className={`project-visual ${p.visual}`}>
                   {p.image
                     ? <img src={p.image} alt={p.title} className="project-img" />
-                    : <ProjectMock variant={p.visual} />
+                    : <ProjectMock />
                   }
                 </div>
                 <div className="project-info">
                   <div className="project-num">{p.num} · {p.year}</div>
                   <h3 className="project-title">{p.title}</h3>
-                  <p className="project-desc">{p.desc}</p>
+                  <p className="project-desc">{i18n.tc(p.desc)}</p>
                   <div className="project-stack">
                     {p.stack.map((s, j) => <span key={j}>{s}</span>)}
                   </div>
                   <a href="#" className="project-link" data-cursor="hover">
-                    View case study
+                    {t('work.view')}
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
                       <path d="M5 12h14M13 5l7 7-7 7"/>
                     </svg>
@@ -247,27 +249,28 @@ function Projects({ data }) {
 }
 
 // ============ Experience ============
-function Experience({ data }) {
+function Experience({ data, locale }) {
+  const t = k => i18n.t(k);
   return (
     <section className="section" id="experience">
       <Reveal>
-        <div className="section-eyebrow">Experience</div>
-        <h2 className="section-title">Where I've shipped.</h2>
+        <div className="section-eyebrow">{t('exp.eyebrow')}</div>
+        <h2 className="section-title">{t('exp.heading')}</h2>
       </Reveal>
       <Reveal stagger className="timeline">
         {data.experience.map((e, i) => (
           <div className="timeline-item" key={i}>
-            <div className="timeline-date">{e.date}</div>
+            <div className="timeline-date">{i18n.formatDateRange(e.from, e.to)}</div>
             <h3 className="timeline-role">
-              {e.role}{' '}
+              {i18n.tc(e.role)}{' '}
               <span className="timeline-company">
                 {e.logo && <img src={e.logo} className="timeline-logo" alt={e.company} />}
                 · {e.company}
               </span>
             </h3>
-            <p className="timeline-desc">{e.desc}</p>
+            <p className="timeline-desc">{i18n.tc(e.desc)}</p>
             <div className="timeline-tags">
-              {e.tags.map((t, j) => <span key={j}>{t}</span>)}
+              {e.tags.map((tag, j) => <span key={j}>{tag}</span>)}
             </div>
           </div>
         ))}
@@ -277,27 +280,28 @@ function Experience({ data }) {
 }
 
 // ============ Education + Awards ============
-function EducationAwards({ data }) {
+function EducationAwards({ data, locale }) {
+  const t = k => i18n.t(k);
   return (
     <section className="section" id="education">
       <Reveal>
-        <div className="section-eyebrow">The paper trail</div>
-        <h2 className="section-title">Education & recognition.</h2>
+        <div className="section-eyebrow">{t('edu.eyebrow')}</div>
+        <h2 className="section-title">{t('edu.heading')}</h2>
       </Reveal>
       <div className="split-grid" style={{ marginTop: 60 }}>
         <Reveal as="div" className="split-block">
-          <div className="block-title">Education</div>
+          <div className="block-title">{t('edu.label')}</div>
           {data.education.map((e, i) => (
             <div className="edu-card" key={i}>
               {e.logo && <img src={e.logo} className="edu-logo" alt={e.school} />}
               <div className="edu-school">{e.school}</div>
-              <div className="edu-degree">{e.degree}</div>
-              <div className="edu-meta">{e.meta}</div>
+              <div className="edu-degree">{i18n.tc(e.degree)}</div>
+              <div className="edu-meta">{i18n.formatYearRange(e.from, e.to, e.ongoing)}</div>
             </div>
           ))}
         </Reveal>
         <Reveal as="div" className="split-block">
-          <div className="block-title">Awards & certifications</div>
+          <div className="block-title">{t('awards.label')}</div>
           {data.awards.map((a, i) => (
             <div className="award-card" key={i}>
               <div className="award-year">{a.year}</div>
@@ -314,14 +318,15 @@ function EducationAwards({ data }) {
 }
 
 // ============ Contact ============
-function Contact({ data }) {
+function Contact({ data, locale }) {
+  const t = k => i18n.t(k);
   return (
     <section className="contact-section" id="contact">
       <Reveal>
-        <div className="section-eyebrow">Get in touch</div>
+        <div className="section-eyebrow">{t('contact.eyebrow')}</div>
         <h2 className="contact-title">
-          <span className="line">Let's build</span>
-          <span className="line">something good.</span>
+          <span className="line">{t('contact.line1')}</span>
+          <span className="line">{t('contact.line2')}</span>
         </h2>
         <Magnetic strength={0.25}>
           <a className="contact-email" href={`mailto:${data.email}`} data-cursor="hover">{data.email}</a>

@@ -1,5 +1,5 @@
-/* global React, ReactDOM, PORTFOLIO_DATA, Cursor, Nav, Hero, About, Skills, Projects, Experience, EducationAwards, Contact, useTweaks, TweaksPanel, TweakSection, TweakRadio, TweakColor, TweakToggle, TweakSelect */
-const { useEffect } = React;
+/* global React, ReactDOM, PORTFOLIO_DATA, i18n, Nav, Hero, About, Skills, Projects, Experience, EducationAwards, Contact, useTweaks, TweaksPanel, TweakSection, TweakRadio, TweakColor, TweakToggle, TweakSelect */
+const { useEffect, useState } = React;
 
 const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
   "theme": "light",
@@ -10,49 +10,50 @@ const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
 
 const ACCENT_OPTIONS = ["#0071e3", "#ff6b35", "#a78bfa", "#10b981", "#1d1d1f"];
 const FONT_OPTIONS = [
-  { label: "Inter", value: "Inter" },
-  { label: "Manrope", value: "Manrope" },
-  { label: "Space Grotesk", value: "Space Grotesk" },
+  { label: "Inter",          value: "Inter" },
+  { label: "Manrope",        value: "Manrope" },
+  { label: "Space Grotesk",  value: "Space Grotesk" },
   { label: "JetBrains Mono", value: "JetBrains Mono" }
 ];
 
 function App() {
   const [tweaks, setTweak] = useTweaks(TWEAK_DEFAULTS);
+  const [locale, setLocale] = useState(i18n.current);
 
-  // Apply theme
+  const changeLocale = (l) => {
+    i18n.set(l);
+    setLocale(l);
+  };
+
   useEffect(() => {
     document.documentElement.dataset.theme = tweaks.theme;
   }, [tweaks.theme]);
 
-  // Apply accent
   useEffect(() => {
     document.documentElement.style.setProperty('--accent', tweaks.accent);
     document.documentElement.style.setProperty('--accent-hover', tweaks.accent);
   }, [tweaks.accent]);
 
-  // Apply font
   useEffect(() => {
     document.body.style.fontFamily = `'${tweaks.font}', -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', sans-serif`;
   }, [tweaks.font]);
 
-  // No custom cursor — native pointer only.
+  const p = { data: PORTFOLIO_DATA, locale };
 
   return (
     <>
       {tweaks.showGrid && <div className="bg-grid" />}
-      <Nav data={PORTFOLIO_DATA} />
+      <Nav {...p} onLocaleChange={changeLocale} />
       <main>
-        <Hero data={PORTFOLIO_DATA} />
-        <About data={PORTFOLIO_DATA} />
-        <Skills data={PORTFOLIO_DATA} />
-        <Projects data={PORTFOLIO_DATA} />
-        <Experience data={PORTFOLIO_DATA} />
-        <EducationAwards data={PORTFOLIO_DATA} />
-        <Contact data={PORTFOLIO_DATA} />
+        <Hero {...p} />
+        <About {...p} />
+        <Skills {...p} />
+        <Projects {...p} />
+        <Experience {...p} />
+        <EducationAwards {...p} />
+        <Contact {...p} />
       </main>
-      <footer className="footer">
-        © 2026 Albert González · Designed & built with care.
-      </footer>
+      <footer className="footer">{i18n.t('footer')}</footer>
 
       <TweaksPanel title="Tweaks">
         <TweakSection title="Appearance">
