@@ -4,16 +4,17 @@ const { useEffect, useRef, useState } = React;
 // ============ Nav ============
 function Nav({ data, locale, onLocaleChange }) {
   const t = k => i18n.t(k);
+  const vis = key => data.sections?.[key] !== false;
   return (
     <nav className="nav">
       <div className="nav-inner">
         <div className="nav-brand">{data.name} {data.surname}.</div>
         <div className="nav-links">
-          <a href="#about">{t('nav.about')}</a>
-          <a href="#skills">{t('nav.skills')}</a>
-          <a href="#projects">{t('nav.work')}</a>
-          <a href="#experience">{t('nav.experience')}</a>
-          <a href="#contact">{t('nav.contact')}</a>
+          {vis('about')      && <a href="#about">{t('nav.about')}</a>}
+          {vis('skills')     && <a href="#skills">{t('nav.skills')}</a>}
+          {vis('projects')   && <a href="#projects">{t('nav.work')}</a>}
+          {vis('experience') && <a href="#experience">{t('nav.experience')}</a>}
+          {vis('contact')    && <a href="#contact">{t('nav.contact')}</a>}
         </div>
         <div className="lang-switcher">
           {['en','es','ca'].map(l => (
@@ -289,7 +290,7 @@ function EducationAwards({ data, locale }) {
         <h2 className="section-title">{t('edu.heading')}</h2>
       </Reveal>
       <div className="split-grid" style={{ marginTop: 60 }}>
-        <Reveal as="div" className="split-block">
+        {data.sections?.education !== false && <Reveal as="div" className="split-block">
           <div className="block-title">{t('edu.label')}</div>
           {data.education.map((e, i) => (
             <div className="edu-card" key={i}>
@@ -299,8 +300,8 @@ function EducationAwards({ data, locale }) {
               <div className="edu-meta">{i18n.formatYearRange(e.from, e.to, e.ongoing)}</div>
             </div>
           ))}
-        </Reveal>
-        <Reveal as="div" className="split-block">
+        </Reveal>}
+        {data.sections?.awards !== false && <Reveal as="div" className="split-block">
           <div className="block-title">{t('awards.label')}</div>
           {data.awards.map((a, i) => (
             <div className="award-card" key={i}>
@@ -311,7 +312,7 @@ function EducationAwards({ data, locale }) {
               </div>
             </div>
           ))}
-        </Reveal>
+        </Reveal>}
       </div>
     </section>
   );

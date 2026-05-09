@@ -148,6 +148,16 @@ window.PORTFOLIO_DATA = {
     }
   ],
 
+  sections: {
+    about:      true,
+    skills:     true,
+    projects:   true,
+    experience: true,
+    education:  true,
+    awards:     true,
+    contact:    true
+  },
+
   awards: [
     { year: 2025, title: "Microsoft Certified: Azure Fundamentals (AZ-900)", org: "Microsoft" },
     { year: 2024, title: "Best Final Project — Software Engineering II",     org: "University" },

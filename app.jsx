@@ -39,6 +39,7 @@ function App() {
   }, [tweaks.font]);
 
   const p = { data: PORTFOLIO_DATA, locale };
+  const vis = (key) => PORTFOLIO_DATA.sections?.[key] !== false;
 
   return (
     <>
@@ -46,12 +47,12 @@ function App() {
       <Nav {...p} onLocaleChange={changeLocale} />
       <main>
         <Hero {...p} />
-        <About {...p} />
-        <Skills {...p} />
-        <Projects {...p} />
-        <Experience {...p} />
-        <EducationAwards {...p} />
-        <Contact {...p} />
+        {vis('about')      && <About {...p} />}
+        {vis('skills')     && <Skills {...p} />}
+        {vis('projects')   && <Projects {...p} />}
+        {vis('experience') && <Experience {...p} />}
+        {(vis('education') || vis('awards')) && <EducationAwards {...p} />}
+        {vis('contact')    && <Contact {...p} />}
       </main>
       <footer className="footer">{i18n.t('footer')}</footer>
 
