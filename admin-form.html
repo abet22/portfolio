@@ -1,0 +1,1176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Portfolio Admin — Edit Your Data</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      overflow: hidden;
+    }
+
+    .header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 40px;
+      text-align: center;
+    }
+
+    .header h1 {
+      font-size: 2.5em;
+      margin-bottom: 10px;
+    }
+
+    .header p {
+      opacity: 0.9;
+      font-size: 1.1em;
+    }
+
+    .content {
+      padding: 40px;
+      max-height: calc(100vh - 300px);
+      overflow-y: auto;
+    }
+
+    .section {
+      margin-bottom: 50px;
+      border-bottom: 1px solid #e0e0e0;
+      padding-bottom: 30px;
+    }
+
+    .section:last-child {
+      border-bottom: none;
+    }
+
+    .section-title {
+      font-size: 1.5em;
+      color: #333;
+      margin-bottom: 20px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .section-title::before {
+      content: '';
+      width: 4px;
+      height: 24px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-radius: 2px;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .form-group label {
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 8px;
+      font-size: 0.95em;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      padding: 10px 12px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      font-family: inherit;
+      font-size: 0.95em;
+      transition: all 0.2s;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: #667eea;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+
+    .form-group textarea {
+      min-height: 100px;
+      resize: vertical;
+      font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+    }
+
+    .multilingual-group {
+      background: #f8f9fa;
+      padding: 15px;
+      border-radius: 6px;
+      margin-bottom: 15px;
+    }
+
+    .lang-tabs {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 15px;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .lang-tab {
+      padding: 8px 16px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+      color: #666;
+      border-bottom: 2px solid transparent;
+      transition: all 0.2s;
+    }
+
+    .lang-tab.active {
+      color: #667eea;
+      border-bottom-color: #667eea;
+    }
+
+    .array-section {
+      background: #f8f9fa;
+      padding: 20px;
+      border-radius: 6px;
+      margin-bottom: 20px;
+    }
+
+    .array-item {
+      background: white;
+      padding: 15px;
+      border-radius: 6px;
+      margin-bottom: 15px;
+      border-left: 4px solid #667eea;
+      position: relative;
+    }
+
+    .array-item-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+
+    .array-item-title {
+      font-weight: 600;
+      color: #333;
+    }
+
+    .btn {
+      padding: 10px 16px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.95em;
+      transition: all 0.2s;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+    }
+
+    .btn-secondary {
+      background: #e0e0e0;
+      color: #333;
+    }
+
+    .btn-secondary:hover {
+      background: #d0d0d0;
+    }
+
+    .btn-danger {
+      background: #ff6b6b;
+      color: white;
+      padding: 6px 12px;
+      font-size: 0.85em;
+    }
+
+    .btn-danger:hover {
+      background: #ff5252;
+    }
+
+    .btn-add {
+      background: #10b981;
+      color: white;
+      margin-bottom: 15px;
+    }
+
+    .btn-add:hover {
+      background: #059669;
+    }
+
+    .footer {
+      background: #f8f9fa;
+      padding: 30px 40px;
+      border-top: 1px solid #e0e0e0;
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+    }
+
+    .checkbox-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .checkbox-group input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      cursor: pointer;
+    }
+
+    .skill-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .skill-tag {
+      background: #667eea;
+      color: white;
+      padding: 6px 12px;
+      border-radius: 20px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.9em;
+    }
+
+    .skill-tag button {
+      background: none;
+      border: none;
+      color: white;
+      cursor: pointer;
+      font-weight: bold;
+      padding: 0;
+      margin-left: 4px;
+    }
+
+    .success-message {
+      background: #d4edda;
+      color: #155724;
+      padding: 12px 16px;
+      border-radius: 6px;
+      margin-bottom: 20px;
+      display: none;
+    }
+
+    .success-message.show {
+      display: block;
+    }
+
+    .code-block {
+      background: #2d2d2d;
+      color: #f8f8f2;
+      padding: 15px;
+      border-radius: 6px;
+      font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+      font-size: 0.85em;
+      overflow-x: auto;
+      margin-top: 10px;
+    }
+
+    .collapse-section {
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .collapse-icon {
+      transition: transform 0.2s;
+    }
+
+    .collapsed .collapse-icon {
+      transform: rotate(-90deg);
+    }
+
+    .collapsed .section-content {
+      display: none;
+    }
+
+    .grid-2 {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    @media (max-width: 768px) {
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .grid-2 {
+        grid-template-columns: 1fr;
+      }
+
+      .lang-tabs {
+        flex-wrap: wrap;
+      }
+
+      .header h1 {
+        font-size: 1.8em;
+      }
+
+      .content {
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>✏️ Portfolio Editor</h1>
+      <p>Update all your portfolio information in one place</p>
+    </div>
+
+    <div class="content">
+      <div class="success-message" id="successMessage">✓ Changes saved! Copy the code below to update your data.js file.</div>
+
+      <form id="portfolioForm">
+        <!-- BASIC INFO SECTION -->
+        <div class="section">
+          <h2 class="section-title">Basic Information</h2>
+          <div class="form-grid">
+            <div class="form-group">
+              <label>First Name</label>
+              <input type="text" id="name" />
+            </div>
+            <div class="form-group">
+              <label>Last Name</label>
+              <input type="text" id="surname" />
+            </div>
+            <div class="form-group">
+              <label>Email</label>
+              <input type="email" id="email" />
+            </div>
+            <div class="form-group">
+              <label>Location</label>
+              <input type="text" id="location" />
+            </div>
+            <div class="form-group">
+              <label>Years Coding</label>
+              <input type="number" id="yearsCoding" />
+            </div>
+            <div class="form-group">
+              <label>GitHub</label>
+              <input type="text" id="github" placeholder="github.com/username" />
+            </div>
+            <div class="form-group">
+              <label>LinkedIn</label>
+              <input type="text" id="linkedin" placeholder="linkedin.com/in/username" />
+            </div>
+          </div>
+        </div>
+
+        <!-- ROLE & TAGLINE (MULTILINGUAL) -->
+        <div class="section">
+          <h2 class="section-title">Role & Tagline</h2>
+
+          <h3 style="margin-bottom: 15px; color: #666;">Professional Role</h3>
+          <div class="multilingual-group">
+            <div class="lang-tabs" id="roleTabs">
+              <button type="button" class="lang-tab active" data-lang="en">English</button>
+              <button type="button" class="lang-tab" data-lang="es">Español</button>
+              <button type="button" class="lang-tab" data-lang="ca">Català</button>
+            </div>
+            <div class="form-group">
+              <input type="text" id="role-en" placeholder="Your professional role in English" />
+            </div>
+            <div class="form-group" style="display:none;">
+              <input type="text" id="role-es" placeholder="Tu rol profesional en español" />
+            </div>
+            <div class="form-group" style="display:none;">
+              <input type="text" id="role-ca" placeholder="El teu rol professional en català" />
+            </div>
+          </div>
+
+          <h3 style="margin-bottom: 15px; color: #666; margin-top: 30px;">Tagline</h3>
+          <div class="multilingual-group">
+            <div class="lang-tabs" id="taglineTabs">
+              <button type="button" class="lang-tab active" data-lang="en">English</button>
+              <button type="button" class="lang-tab" data-lang="es">Español</button>
+              <button type="button" class="lang-tab" data-lang="ca">Català</button>
+            </div>
+            <div class="form-group">
+              <textarea id="tagline-en" placeholder="Your professional tagline in English"></textarea>
+            </div>
+            <div class="form-group" style="display:none;">
+              <textarea id="tagline-es" placeholder="Tu tagline profesional en español"></textarea>
+            </div>
+            <div class="form-group" style="display:none;">
+              <textarea id="tagline-ca" placeholder="El teu tagline professional en català"></textarea>
+            </div>
+          </div>
+        </div>
+
+        <!-- ABOUT SECTION (MULTILINGUAL) -->
+        <div class="section">
+          <h2 class="section-title">About Me</h2>
+          <p style="color: #666; margin-bottom: 20px; font-size: 0.95em;">Add 3 paragraphs about yourself. Separate each with a newline.</p>
+          
+          <h3 style="margin-bottom: 15px; color: #666;">English</h3>
+          <div class="multilingual-group">
+            <div class="form-group">
+              <textarea id="about-en" placeholder="Paragraph 1&#10;&#10;Paragraph 2&#10;&#10;Paragraph 3"></textarea>
+            </div>
+          </div>
+
+          <h3 style="margin-bottom: 15px; color: #666;">Español</h3>
+          <div class="multilingual-group">
+            <div class="form-group">
+              <textarea id="about-es" placeholder="Párrafo 1&#10;&#10;Párrafo 2&#10;&#10;Párrafo 3"></textarea>
+            </div>
+          </div>
+
+          <h3 style="margin-bottom: 15px; color: #666;">Català</h3>
+          <div class="multilingual-group">
+            <div class="form-group">
+              <textarea id="about-ca" placeholder="Paràgraf 1&#10;&#10;Paràgraf 2&#10;&#10;Paràgraf 3"></textarea>
+            </div>
+          </div>
+        </div>
+
+        <!-- SKILLS MARQUEE -->
+        <div class="section">
+          <h2 class="section-title">Skills Marquee</h2>
+          <p style="color: #666; margin-bottom: 15px; font-size: 0.95em;">List your top skills (they'll scroll in the marquee). Separate with commas.</p>
+          <div class="form-group">
+            <label>Skills</label>
+            <textarea id="skillsMarquee" placeholder="TypeScript, React, Node.js, C#, .NET, C++, Python, Azure, Docker, Kubernetes..."></textarea>
+          </div>
+        </div>
+
+        <!-- SKILL CATEGORIES -->
+        <div class="section">
+          <h2 class="section-title">Skill Categories</h2>
+          <div class="array-section" id="skillCategories"></div>
+          <button type="button" class="btn btn-add" onclick="addSkillCategory()">+ Add Skill Category</button>
+        </div>
+
+        <!-- STATS -->
+        <div class="section">
+          <h2 class="section-title">Stats</h2>
+          <div class="array-section" id="stats"></div>
+          <button type="button" class="btn btn-add" onclick="addStat()">+ Add Stat</button>
+        </div>
+
+        <!-- PROJECTS -->
+        <div class="section">
+          <h2 class="section-title">Projects</h2>
+          <div class="array-section" id="projects"></div>
+          <button type="button" class="btn btn-add" onclick="addProject()">+ Add Project</button>
+        </div>
+
+        <!-- EXPERIENCE -->
+        <div class="section">
+          <h2 class="section-title">Experience</h2>
+          <div class="array-section" id="experience"></div>
+          <button type="button" class="btn btn-add" onclick="addExperience()">+ Add Experience</button>
+        </div>
+
+        <!-- EDUCATION -->
+        <div class="section">
+          <h2 class="section-title">Education</h2>
+          <div class="array-section" id="education"></div>
+          <button type="button" class="btn btn-add" onclick="addEducation()">+ Add Education</button>
+        </div>
+
+        <!-- AWARDS -->
+        <div class="section">
+          <h2 class="section-title">Awards</h2>
+          <div class="array-section" id="awards"></div>
+          <button type="button" class="btn btn-add" onclick="addAward()">+ Add Award</button>
+        </div>
+
+        <!-- SECTIONS VISIBILITY -->
+        <div class="section">
+          <h2 class="section-title">Show/Hide Sections</h2>
+          <div class="form-grid">
+            <div class="checkbox-group">
+              <input type="checkbox" id="section-about" checked />
+              <label for="section-about">About</label>
+            </div>
+            <div class="checkbox-group">
+              <input type="checkbox" id="section-skills" checked />
+              <label for="section-skills">Skills</label>
+            </div>
+            <div class="checkbox-group">
+              <input type="checkbox" id="section-projects" checked />
+              <label for="section-projects">Projects</label>
+            </div>
+            <div class="checkbox-group">
+              <input type="checkbox" id="section-experience" checked />
+              <label for="section-experience">Experience</label>
+            </div>
+            <div class="checkbox-group">
+              <input type="checkbox" id="section-education" checked />
+              <label for="section-education">Education</label>
+            </div>
+            <div class="checkbox-group">
+              <input type="checkbox" id="section-awards" />
+              <label for="section-awards">Awards</label>
+            </div>
+            <div class="checkbox-group">
+              <input type="checkbox" id="section-contact" checked />
+              <label for="section-contact">Contact</label>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <div class="footer">
+      <button class="btn btn-primary" onclick="generateCode()" style="padding: 12px 24px; font-size: 1em;">
+        💾 Generate data.js Code
+      </button>
+      <button class="btn btn-secondary" onclick="downloadDataFile()" style="padding: 12px 24px; font-size: 1em;">
+        ⬇️ Download data.js
+      </button>
+      <button class="btn btn-secondary" onclick="resetForm()" style="padding: 12px 24px; font-size: 1em;">
+        ↻ Reset
+      </button>
+    </div>
+  </div>
+
+  <!-- Modal for code display -->
+  <div id="codeModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.7); z-index:1000; padding:20px;">
+    <div style="background:white; max-width:90%; max-height:90%; overflow:auto; margin:auto; border-radius:12px; padding:30px; position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);">
+      <h2 style="margin-bottom:20px;">Generated data.js Code</h2>
+      <div id="codeDisplay" class="code-block"></div>
+      <button class="btn btn-primary" onclick="copyCode()" style="margin-top:20px; margin-right:10px;">📋 Copy to Clipboard</button>
+      <button class="btn btn-secondary" onclick="closeModal()" style="margin-top:20px;">Close</button>
+    </div>
+  </div>
+
+  <script src="data.js"></script>
+  <script>
+    // Initialize form with existing data
+    function initializeForm() {
+      if (typeof PORTFOLIO_DATA === 'undefined') {
+        console.error('PORTFOLIO_DATA not loaded');
+        return;
+      }
+
+      const data = PORTFOLIO_DATA;
+
+      // Basic info
+      document.getElementById('name').value = data.name || '';
+      document.getElementById('surname').value = data.surname || '';
+      document.getElementById('email').value = data.email || '';
+      document.getElementById('location').value = data.location || '';
+      document.getElementById('yearsCoding').value = data.yearsCoding || '';
+      document.getElementById('github').value = data.github || '';
+      document.getElementById('linkedin').value = data.linkedin || '';
+
+      // Multilingual fields
+      ['en', 'es', 'ca'].forEach(lang => {
+        document.getElementById(`role-${lang}`).value = data.role?.[lang] || '';
+        document.getElementById(`tagline-${lang}`).value = data.tagline?.[lang] || '';
+      });
+
+      // About
+      ['en', 'es', 'ca'].forEach(lang => {
+        const about = data.about?.[lang];
+        document.getElementById(`about-${lang}`).value = about ? about.join('\n\n') : '';
+      });
+
+      // Skills marquee
+      document.getElementById('skillsMarquee').value = data.skillsMarquee ? data.skillsMarquee.join(', ') : '';
+
+      // Skill categories
+      renderSkillCategories(data.skillCategories || []);
+
+      // Stats
+      renderStats(data.stats || []);
+
+      // Projects
+      renderProjects(data.projects || []);
+
+      // Experience
+      renderExperience(data.experience || []);
+
+      // Education
+      renderEducation(data.education || []);
+
+      // Awards
+      renderAwards(data.awards || []);
+
+      // Sections
+      if (data.sections) {
+        Object.keys(data.sections).forEach(section => {
+          const checkbox = document.getElementById(`section-${section}`);
+          if (checkbox) {
+            checkbox.checked = data.sections[section];
+          }
+        });
+      }
+
+      // Setup language tabs
+      setupLanguageTabs();
+    }
+
+    function setupLanguageTabs() {
+      document.querySelectorAll('.lang-tabs').forEach(tabs => {
+        const multilingualGroup = tabs.closest('.multilingual-group');
+        if (!multilingualGroup) return;
+        
+        // Get direct children that are form-groups (skip lang-tabs)
+        const formGroups = Array.from(multilingualGroup.children).filter(el => el.classList.contains('form-group'));
+        
+        tabs.querySelectorAll('.lang-tab').forEach(tab => {
+          tab.addEventListener('click', (e) => {
+            e.preventDefault();
+            const selectedLang = tab.dataset.lang;
+            const langOrder = ['en', 'es', 'ca'];
+            const selectedIndex = langOrder.indexOf(selectedLang);
+            
+            // Update active tab styling
+            tabs.querySelectorAll('.lang-tab').forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+            
+            // Show/hide form groups
+            formGroups.forEach((fg, idx) => {
+              fg.style.display = idx === selectedIndex ? 'flex' : 'none';
+            });
+          });
+        });
+      });
+    }
+
+    function renderSkillCategories(categories) {
+      const container = document.getElementById('skillCategories');
+      container.innerHTML = '';
+      categories.forEach((cat, idx) => {
+        container.innerHTML += `
+          <div class="array-item">
+            <div class="array-item-header">
+              <div class="array-item-title">Category ${idx + 1}: ${cat.label}</div>
+              <button type="button" class="btn btn-danger" onclick="removeSkillCategory(${idx})">Remove</button>
+            </div>
+            <div class="form-group">
+              <label>Label</label>
+              <input type="text" value="${cat.label}" onchange="updateSkillCategory(${idx}, 'label', this.value)" />
+            </div>
+            <div class="form-group">
+              <label>Skills (comma-separated)</label>
+              <input type="text" value="${cat.items ? cat.items.join(', ') : ''}" onchange="updateSkillCategory(${idx}, 'items', this.value)" />
+            </div>
+          </div>
+        `;
+      });
+    }
+
+    function addSkillCategory() {
+      if (typeof PORTFOLIO_DATA === 'undefined') return;
+      if (!PORTFOLIO_DATA.skillCategories) PORTFOLIO_DATA.skillCategories = [];
+      PORTFOLIO_DATA.skillCategories.push({ label: 'New Category', items: [] });
+      renderSkillCategories(PORTFOLIO_DATA.skillCategories);
+    }
+
+    function updateSkillCategory(idx, field, value) {
+      if (field === 'items') {
+        PORTFOLIO_DATA.skillCategories[idx].items = value.split(',').map(s => s.trim());
+      } else {
+        PORTFOLIO_DATA.skillCategories[idx][field] = value;
+      }
+      renderSkillCategories(PORTFOLIO_DATA.skillCategories);
+    }
+
+    function removeSkillCategory(idx) {
+      PORTFOLIO_DATA.skillCategories.splice(idx, 1);
+      renderSkillCategories(PORTFOLIO_DATA.skillCategories);
+    }
+
+    function renderStats(stats) {
+      const container = document.getElementById('stats');
+      container.innerHTML = '';
+      stats.forEach((stat, idx) => {
+        container.innerHTML += `
+          <div class="array-item">
+            <div class="array-item-header">
+              <div class="array-item-title">Stat ${idx + 1}: ${stat.num}</div>
+              <button type="button" class="btn btn-danger" onclick="removeStat(${idx})">Remove</button>
+            </div>
+            <div class="form-grid">
+              <div class="form-group">
+                <label>Number/Value</label>
+                <input type="text" value="${stat.num}" onchange="updateStat(${idx}, 'num', this.value)" />
+              </div>
+              <div class="form-group">
+                <label>Label (EN)</label>
+                <input type="text" value="${stat.label?.en || ''}" onchange="updateStat(${idx}, 'label-en', this.value)" />
+              </div>
+              <div class="form-group">
+                <label>Label (ES)</label>
+                <input type="text" value="${stat.label?.es || ''}" onchange="updateStat(${idx}, 'label-es', this.value)" />
+              </div>
+              <div class="form-group">
+                <label>Label (CA)</label>
+                <input type="text" value="${stat.label?.ca || ''}" onchange="updateStat(${idx}, 'label-ca', this.value)" />
+              </div>
+            </div>
+          </div>
+        `;
+      });
+    }
+
+    function addStat() {
+      if (!PORTFOLIO_DATA.stats) PORTFOLIO_DATA.stats = [];
+      PORTFOLIO_DATA.stats.push({ num: 'X', label: { en: 'Label', es: 'Etiqueta', ca: 'Etiqueta' } });
+      renderStats(PORTFOLIO_DATA.stats);
+    }
+
+    function updateStat(idx, field, value) {
+      if (field === 'num') {
+        PORTFOLIO_DATA.stats[idx].num = value;
+      } else if (field.startsWith('label-')) {
+        const lang = field.split('-')[1];
+        PORTFOLIO_DATA.stats[idx].label[lang] = value;
+      }
+      renderStats(PORTFOLIO_DATA.stats);
+    }
+
+    function removeStat(idx) {
+      PORTFOLIO_DATA.stats.splice(idx, 1);
+      renderStats(PORTFOLIO_DATA.stats);
+    }
+
+    function renderProjects(projects) {
+      const container = document.getElementById('projects');
+      container.innerHTML = '';
+      projects.forEach((proj, idx) => {
+        container.innerHTML += `
+          <div class="array-item">
+            <div class="array-item-header">
+              <div class="array-item-title">Project ${proj.num}: ${proj.title}</div>
+              <button type="button" class="btn btn-danger" onclick="removeProject(${idx})">Remove</button>
+            </div>
+            <div class="form-grid">
+              <div class="form-group">
+                <label>Number</label>
+                <input type="text" value="${proj.num}" onchange="updateProject(${idx}, 'num', this.value)" />
+              </div>
+              <div class="form-group">
+                <label>Title</label>
+                <input type="text" value="${proj.title}" onchange="updateProject(${idx}, 'title', this.value)" />
+              </div>
+              <div class="form-group" style="grid-column: 1/-1;">
+                <label>Description (EN)</label>
+                <textarea onchange="updateProject(${idx}, 'desc-en', this.value)">${proj.desc?.en || ''}</textarea>
+              </div>
+              <div class="form-group" style="grid-column: 1/-1;">
+                <label>Description (ES)</label>
+                <textarea onchange="updateProject(${idx}, 'desc-es', this.value)">${proj.desc?.es || ''}</textarea>
+              </div>
+              <div class="form-group" style="grid-column: 1/-1;">
+                <label>Description (CA)</label>
+                <textarea onchange="updateProject(${idx}, 'desc-ca', this.value)">${proj.desc?.ca || ''}</textarea>
+              </div>
+              <div class="form-group">
+                <label>Stack (comma-separated)</label>
+                <input type="text" value="${proj.stack ? proj.stack.join(', ') : ''}" onchange="updateProject(${idx}, 'stack', this.value)" />
+              </div>
+              <div class="form-group">
+                <label>Visual ID</label>
+                <input type="text" value="${proj.visual || ''}" onchange="updateProject(${idx}, 'visual', this.value)" />
+              </div>
+              <div class="form-group">
+                <label>Year</label>
+                <input type="text" value="${proj.year || ''}" onchange="updateProject(${idx}, 'year', this.value)" />
+              </div>
+            </div>
+          </div>
+        `;
+      });
+    }
+
+    function addProject() {
+      if (!PORTFOLIO_DATA.projects) PORTFOLIO_DATA.projects = [];
+      PORTFOLIO_DATA.projects.push({
+        num: String(PORTFOLIO_DATA.projects.length + 1).padStart(2, '0'),
+        title: 'New Project',
+        desc: { en: '', es: '', ca: '' },
+        stack: [],
+        visual: 'var-1',
+        year: new Date().getFullYear().toString()
+      });
+      renderProjects(PORTFOLIO_DATA.projects);
+    }
+
+    function updateProject(idx, field, value) {
+      if (field === 'stack') {
+        PORTFOLIO_DATA.projects[idx].stack = value.split(',').map(s => s.trim());
+      } else if (field.startsWith('desc-')) {
+        const lang = field.split('-')[1];
+        PORTFOLIO_DATA.projects[idx].desc[lang] = value;
+      } else {
+        PORTFOLIO_DATA.projects[idx][field] = value;
+      }
+      renderProjects(PORTFOLIO_DATA.projects);
+    }
+
+    function removeProject(idx) {
+      PORTFOLIO_DATA.projects.splice(idx, 1);
+      renderProjects(PORTFOLIO_DATA.projects);
+    }
+
+    function renderExperience(exp) {
+      const container = document.getElementById('experience');
+      container.innerHTML = '';
+      exp.forEach((item, idx) => {
+        const fromDate = `${item.from.month}/${item.from.year}`;
+        const toDate = item.to ? `${item.to.month}/${item.to.year}` : 'Present';
+        container.innerHTML += `
+          <div class="array-item">
+            <div class="array-item-header">
+              <div class="array-item-title">${item.company} · ${item.role?.en || 'Role'}</div>
+              <button type="button" class="btn btn-danger" onclick="removeExperience(${idx})">Remove</button>
+            </div>
+            <div class="form-grid">
+              <div class="form-group">
+                <label>Company</label>
+                <input type="text" value="${item.company}" onchange="updateExperience(${idx}, 'company', this.value)" />
+              </div>
+              <div class="form-group">
+                <label>Role (EN)</label>
+                <input type="text" value="${item.role?.en || ''}" onchange="updateExperience(${idx}, 'role-en', this.value)" />
+              </div>
+              <div class="form-group">
+                <label>Role (ES)</label>
+                <input type="text" value="${item.role?.es || ''}" onchange="updateExperience(${idx}, 'role-es', this.value)" />
+              </div>
+              <div class="form-group">
+                <label>Role (CA)</label>
+                <input type="text" value="${item.role?.ca || ''}" onchange="updateExperience(${idx}, 'role-ca', this.value)" />
+              </div>
+              <div class="form-group" style="grid-column: 1/-1;">
+                <label>Description (EN)</label>
+                <textarea onchange="updateExperience(${idx}, 'desc-en', this.value)">${item.desc?.en || ''}</textarea>
+              </div>
+              <div class="form-group" style="grid-column: 1/-1;">
+                <label>Description (ES)</label>
+                <textarea onchange="updateExperience(${idx}, 'desc-es', this.value)">${item.desc?.es || ''}</textarea>
+              </div>
+              <div class="form-group" style="grid-column: 1/-1;">
+                <label>Description (CA)</label>
+                <textarea onchange="updateExperience(${idx}, 'desc-ca', this.value)">${item.desc?.ca || ''}</textarea>
+              </div>
+              <div class="form-group">
+                <label>From Month</label>
+                <input type="number" min="1" max="12" value="${item.from?.month || 1}" onchange="updateExperience(${idx}, 'from-month', this.value)" />
+              </div>
+              <div class="form-group">
+                <label>From Year</label>
+                <input type="number" value="${item.from?.year || 2024}" onchange="updateExperience(${idx}, 'from-year', this.value)" />
+              </div>
+              <div class="form-group">
+                <label>To Month</label>
+                <input type="number" min="1" max="12" value="${item.to?.month || 1}" placeholder="Leave empty if current" onchange="updateExperience(${idx}, 'to-month', this.value)" />
+              </div>
+              <div class="form-group">
+                <label>To Year</label>
+                <input type="number" value="${item.to?.year || 2024}" placeholder="Leave empty if current" onchange="updateExperience(${idx}, 'to-year', this.value)" />
+              </div>
+              <div class="form-group" style="grid-column: 1/-1;">
+                <label>Tags (comma-separated)</label>
+                <input type="text" value="${item.tags ? item.tags.join(', ') : ''}" onchange="updateExperience(${idx}, 'tags', this.value)" />
+              </div>
+            </div>
+          </div>
+        `;
+      });
+    }
+
+    function addExperience() {
+      if (!PORTFOLIO_DATA.experience) PORTFOLIO_DATA.experience = [];
+      PORTFOLIO_DATA.experience.push({
+        from: { month: 1, year: 2024 },
+        to: null,
+        role: { en: '', es: '', ca: '' },
+        company: '',
+        desc: { en: '', es: '', ca: '' },
+        tags: []
+      });
+      renderExperience(PORTFOLIO_DATA.experience);
+    }
+
+    function updateExperience(idx, field, value) {
+      if (field.startsWith('role-')) {
+        PORTFOLIO_DATA.experience[idx].role[field.split('-')[1]] = value;
+      } else if (field.startsWith('desc-')) {
+        PORTFOLIO_DATA.experience[idx].desc[field.split('-')[1]] = value;
+      } else if (field === 'company') {
+        PORTFOLIO_DATA.experience[idx].company = value;
+      } else if (field === 'tags') {
+        PORTFOLIO_DATA.experience[idx].tags = value.split(',').map(s => s.trim());
+      } else if (field === 'from-month') {
+        PORTFOLIO_DATA.experience[idx].from.month = parseInt(value);
+      } else if (field === 'from-year') {
+        PORTFOLIO_DATA.experience[idx].from.year = parseInt(value);
+      } else if (field === 'to-month') {
+        if (value) {
+          if (!PORTFOLIO_DATA.experience[idx].to) PORTFOLIO_DATA.experience[idx].to = {};
+          PORTFOLIO_DATA.experience[idx].to.month = parseInt(value);
+        }
+      } else if (field === 'to-year') {
+        if (value) {
+          if (!PORTFOLIO_DATA.experience[idx].to) PORTFOLIO_DATA.experience[idx].to = {};
+          PORTFOLIO_DATA.experience[idx].to.year = parseInt(value);
+        } else {
+          PORTFOLIO_DATA.experience[idx].to = null;
+        }
+      }
+      renderExperience(PORTFOLIO_DATA.experience);
+    }
+
+    function removeExperience(idx) {
+      PORTFOLIO_DATA.experience.splice(idx, 1);
+      renderExperience(PORTFOLIO_DATA.experience);
+    }
+
+    function renderEducation(education) {
+      const container = document.getElementById('education');
+      container.innerHTML = '';
+      education.forEach((item, idx) => {
+        container.innerHTML += `
+          <div class="array-item">
+            <div class="array-item-header">
+              <div class="array-item-title">${item.school}</div>
+              <button type="button" class="btn btn-danger" onclick="removeEducation(${idx})">Remove</button>
+            </div>
+            <div class="form-grid">
+              <div class="form-group">
+                <label>School</label>
+                <input type="text" value="${item.school}" onchange="updateEducation(${idx}, 'school', this.value)" />
+              </div>
+              <div class="form-group">
+                <label>Degree (EN)</label>
+                <input type="text" value="${item.degree?.en || ''}" onchange="updateEducation(${idx}, 'degree-en', this.value)" />
+              </div>
+              <div class="form-group">
+                <label>Degree (ES)</label>
+                <input type="text" value="${item.degree?.es || ''}" onchange="updateEducation(${idx}, 'degree-es', this.value)" />
+              </div>
+              <div class="form-group">
+                <label>Degree (CA)</label>
+                <input type="text" value="${item.degree?.ca || ''}" onchange="updateEducation(${idx}, 'degree-ca', this.value)" />
+              </div>
+              <div class="form-group">
+                <label>From</label>
+                <input type="number" value="${item.from}" onchange="updateEducation(${idx}, 'from', this.value)" />
+              </div>
+              <div class="form-group">
+                <label>To</label>
+                <input type="number" value="${item.to}" onchange="updateEducation(${idx}, 'to', this.value)" />
+              </div>
+              <div class="checkbox-group" style="margin-top: 10px;">
+                <input type="checkbox" id="edu-ongoing-${idx}" ${item.ongoing ? 'checked' : ''} onchange="updateEducation(${idx}, 'ongoing', this.checked)" />
+                <label for="edu-ongoing-${idx}">Ongoing</label>
+              </div>
+            </div>
+          </div>
+        `;
+      });
+    }
+
+    function addEducation() {
+      if (!PORTFOLIO_DATA.education) PORTFOLIO_DATA.education = [];
+      PORTFOLIO_DATA.education.push({
+        school: '',
+        degree: { en: '', es: '', ca: '' },
+        from: 2024,
+        to: 2026,
+        ongoing: false
+      });
+      renderEducation(PORTFOLIO_DATA.education);
+    }
+
+    function updateEducation(idx, field, value) {
+      if (field.startsWith('degree-')) {
+        PORTFOLIO_DATA.education[idx].degree[field.split('-')[1]] = value;
+      } else if (field === 'school') {
+        PORTFOLIO_DATA.education[idx].school = value;
+      } else if (field === 'from' || field === 'to') {
+        PORTFOLIO_DATA.education[idx][field] = parseInt(value);
+      } else if (field === 'ongoing') {
+        PORTFOLIO_DATA.education[idx].ongoing = value;
+      }
+      renderEducation(PORTFOLIO_DATA.education);
+    }
+
+    function removeEducation(idx) {
+      PORTFOLIO_DATA.education.splice(idx, 1);
+      renderEducation(PORTFOLIO_DATA.education);
+    }
+
+    function renderAwards(awards) {
+      const container = document.getElementById('awards');
+      container.innerHTML = '';
+      awards.forEach((award, idx) => {
+        container.innerHTML += `
+          <div class="array-item">
+            <div class="array-item-header">
+              <div class="array-item-title">${award.title}</div>
+              <button type="button" class="btn btn-danger" onclick="removeAward(${idx})">Remove</button>
+            </div>
+            <div class="form-grid">
+              <div class="form-group">
+                <label>Title</label>
+                <input type="text" value="${award.title}" onchange="updateAward(${idx}, 'title', this.value)" />
+              </div>
+              <div class="form-group">
+                <label>Organization</label>
+                <input type="text" value="${award.org}" onchange="updateAward(${idx}, 'org', this.value)" />
+              </div>
+              <div class="form-group">
+                <label>Year</label>
+                <input type="number" value="${award.year}" onchange="updateAward(${idx}, 'year', this.value)" />
+              </div>
+            </div>
+          </div>
+        `;
+      });
+    }
+
+    function addAward() {
+      if (!PORTFOLIO_DATA.awards) PORTFOLIO_DATA.awards = [];
+      PORTFOLIO_DATA.awards.push({
+        year: new Date().getFullYear(),
+        title: '',
+        org: ''
+      });
+      renderAwards(PORTFOLIO_DATA.awards);
+    }
+
+    function updateAward(idx, field, value) {
+      if (field === 'year') {
+        PORTFOLIO_DATA.awards[idx].year = parseInt(value);
+      } else {
+        PORTFOLIO_DATA.awards[idx][field] = value;
+      }
+      renderAwards(PORTFOLIO_DATA.awards);
+    }
+
+    function removeAward(idx) {
+      PORTFOLIO_DATA.awards.splice(idx, 1);
+      renderAwards(PORTFOLIO_DATA.awards);
+    }
+
+    function generateCode() {
+      // Update basic fields
+      PORTFOLIO_DATA.name = document.getElementById('name').value;
+      PORTFOLIO_DATA.surname = document.getElementById('surname').value;
+      PORTFOLIO_DATA.email = document.getElementById('email').value;
+      PORTFOLIO_DATA.location = document.getElementById('location').value;
+      PORTFOLIO_DATA.yearsCoding = parseInt(document.getElementById('yearsCoding').value) || 0;
+      PORTFOLIO_DATA.github = document.getElementById('github').value;
+      PORTFOLIO_DATA.linkedin = document.getElementById('linkedin').value;
+
+      // Update multilingual fields
+      ['en', 'es', 'ca'].forEach(lang => {
+        PORTFOLIO_DATA.role[lang] = document.getElementById(`role-${lang}`).value;
+        PORTFOLIO_DATA.tagline[lang] = document.getElementById(`tagline-${lang}`).value;
+        const aboutText = document.getElementById(`about-${lang}`).value;
+        PORTFOLIO_DATA.about[lang] = aboutText.split('\n\n').map(p => p.trim()).filter(p => p);
+      });
+
+      // Update skills marquee
+      const skillsText = document.getElementById('skillsMarquee').value;
+      PORTFOLIO_DATA.skillsMarquee = skillsText.split(',').map(s => s.trim()).filter(s => s);
+
+      // Update sections visibility
+      PORTFOLIO_DATA.sections = {
+        about: document.getElementById('section-about').checked,
+        skills: document.getElementById('section-skills').checked,
+        projects: document.getElementById('section-projects').checked,
+        experience: document.getElementById('section-experience').checked,
+        education: document.getElementById('section-education').checked,
+        awards: document.getElementById('section-awards').checked,
+        contact: document.getElementById('section-contact').checked
+      };
+
+      // Generate JavaScript code
+      const code = `// Portfolio data — Albert González
+window.PORTFOLIO_DATA = ${JSON.stringify(PORTFOLIO_DATA, null, 2)};`;
+
+      // Display in modal
+      document.getElementById('codeDisplay').textContent = code;
+      document.getElementById('codeModal').style.display = 'block';
+      
+      // Show success message
+      const msg = document.getElementById('successMessage');
+      msg.classList.add('show');
+      setTimeout(() => msg.classList.remove('show'), 3000);
+    }
+
+    function copyCode() {
+      const code = document.getElementById('codeDisplay').textContent;
+      navigator.clipboard.writeText(code).then(() => {
+        alert('✓ Code copied to clipboard!\n\nNow:\n1. Replace the contents of data.js with this code\n2. Refresh your portfolio page');
+      });
+    }
+
+    function downloadDataFile() {
+      // Update all fields first
+      generateCode();
+      
+      const code = document.getElementById('codeDisplay').textContent;
+      const blob = new Blob([code], { type: 'text/plain' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'data.js';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+
+    function closeModal() {
+      document.getElementById('codeModal').style.display = 'none';
+    }
+
+    function resetForm() {
+      if (confirm('Are you sure? This will reload the form with current data.')) {
+        initializeForm();
+      }
+    }
+
+    // Initialize on load
+    window.addEventListener('load', initializeForm);
+  </script>
+</body>
+</html>

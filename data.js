@@ -1,6 +1,6 @@
 // Portfolio data — Albert González
 window.PORTFOLIO_DATA = {
-  "name": "Albert",
+  "name": "tuputamadre",
   "surname": "González",
   "role": {
     "en": "Software Engineer",
