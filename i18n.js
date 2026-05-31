@@ -2,21 +2,20 @@ const i18n = {
   current: 'en',
 
   set(locale) {
-    this.current = locale;
-    document.documentElement.lang = locale;
-    try { localStorage.setItem('portfolio_locale', locale); } catch (_) {}
+    this.current = 'en';
+    document.documentElement.lang = 'en';
   },
 
-  // UI string lookup — falls back to English
+  // UI string lookup — English only
   t(key) {
-    const map = { en: window.LOCALE_EN, es: window.LOCALE_ES, ca: window.LOCALE_CA };
-    return map[this.current]?.[key] ?? map.en[key] ?? key;
+    const map = { en: window.LOCALE_EN };
+    return map.en[key] ?? key;
   },
 
-  // Translatable content field — { en, es, ca } object → current locale string
+  // Translatable content field — English only
   tc(obj) {
     if (!obj || typeof obj === 'string') return obj ?? '';
-    return obj[this.current] ?? obj.en ?? '';
+    return obj.en ?? '';
   },
 
   // Format a { month, year } / null date pair into a locale-aware range string
@@ -34,11 +33,5 @@ const i18n = {
     return `${from} — ${to}`;
   },
 };
-
-// Restore persisted locale
-try {
-  const saved = localStorage.getItem('portfolio_locale');
-  if (saved && ['en', 'es', 'ca'].includes(saved)) i18n.current = saved;
-} catch (_) {}
 
 window.i18n = i18n;

@@ -1,5 +1,5 @@
 /* global React, ReactDOM, PORTFOLIO_DATA, i18n, Nav, Hero, About, Skills, Projects, Experience, EducationAwards, Contact, useTweaks, TweaksPanel, TweakSection, TweakRadio, TweakColor, TweakToggle, TweakSelect */
-const { useEffect, useState } = React;
+const { useEffect } = React;
 
 const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
   "theme": "light",
@@ -18,12 +18,6 @@ const FONT_OPTIONS = [
 
 function App() {
   const [tweaks, setTweak] = useTweaks(TWEAK_DEFAULTS);
-  const [locale, setLocale] = useState(i18n.current);
-
-  const changeLocale = (l) => {
-    i18n.set(l);
-    setLocale(l);
-  };
 
   useEffect(() => {
     document.documentElement.dataset.theme = tweaks.theme;
@@ -38,13 +32,13 @@ function App() {
     document.body.style.fontFamily = `'${tweaks.font}', -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', sans-serif`;
   }, [tweaks.font]);
 
-  const p = { data: PORTFOLIO_DATA, locale };
+  const p = { data: PORTFOLIO_DATA };
   const vis = (key) => PORTFOLIO_DATA.sections?.[key] !== false;
 
   return (
     <>
       {tweaks.showGrid && <div className="bg-grid" />}
-      <Nav {...p} onLocaleChange={changeLocale} />
+      <Nav {...p} />
       <main>
         <Hero {...p} />
         {vis('about')      && <About {...p} />}

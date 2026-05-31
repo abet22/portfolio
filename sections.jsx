@@ -2,7 +2,7 @@
 const { useEffect, useRef, useState } = React;
 
 // ============ Nav ============
-function Nav({ data, locale, onLocaleChange }) {
+function Nav({ data }) {
   const t = k => i18n.t(k);
   const vis = key => data.sections?.[key] !== false;
   return (
@@ -15,13 +15,6 @@ function Nav({ data, locale, onLocaleChange }) {
           {vis('projects')   && <a href="#projects">{t('nav.work')}</a>}
           {vis('experience') && <a href="#experience">{t('nav.experience')}</a>}
           {vis('contact')    && <a href="#contact">{t('nav.contact')}</a>}
-        </div>
-        <div className="lang-switcher">
-          {['en','es','ca'].map(l => (
-            <button key={l} className={`lang-btn ${locale === l ? 'active' : ''}`} onClick={() => onLocaleChange(l)}>
-              {l.toUpperCase()}
-            </button>
-          ))}
         </div>
       </div>
     </nav>
@@ -44,7 +37,6 @@ function Hero({ data, locale }) {
         <span><b>{t('hero.available')}</b> · {t('hero.available_for')}</span>
         <span><b>{t('hero.based')}</b> · {data.location}</span>
       </div>
-      <div className="hero-scroll">{t('hero.scroll')}</div>
     </section>
   );
 }
@@ -119,26 +111,8 @@ function Skills({ data, locale }) {
   );
 }
 
-// ============ Project mockup ============
-function ProjectMock() {
-  return (
-    <div className="project-mock">
-      <div className="mock-bar">
-        <div className="mock-dot"/><div className="mock-dot"/><div className="mock-dot"/>
-      </div>
-      <div className="mock-body">
-        <div className="mock-line l1"/><div className="mock-line l2"/><div className="mock-line l3"/>
-        <div className="mock-grid">
-          <div className="mock-tile accent"/><div className="mock-tile"/><div className="mock-tile"/>
-          <div className="mock-tile"/><div className="mock-tile accent"/><div className="mock-tile"/>
-        </div>
-      </div>
-    </div>
-  );
-}
-
 // ============ Pinned scroll showcase ============
-function PinnedShowcase({ data, locale }) {
+function PinnedShowcase({ data }) {
   const t = k => i18n.t(k);
   const wrapperRef = useRef(null);
   const cardRef = useRef(null);
@@ -184,7 +158,7 @@ function PinnedShowcase({ data, locale }) {
     onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
-  }, [locale]);
+  }, []);
 
   return (
     <div ref={wrapperRef} className="showcase">
@@ -202,7 +176,7 @@ function PinnedShowcase({ data, locale }) {
 }
 
 // ============ Projects grid ============
-function Projects({ data, locale }) {
+function Projects({ data }) {
   const t = k => i18n.t(k);
   return (
     <>
@@ -213,34 +187,32 @@ function Projects({ data, locale }) {
         </Reveal>
       </section>
 
-      <PinnedShowcase data={data} locale={locale} />
+      <PinnedShowcase data={data} />
 
       <section className="section" style={{ paddingTop: 80 }}>
         {data.projects.map((p, i) => (
           <Reveal key={i}>
             <article className="project-card">
-              <div className="project-inner">
-                <div className={`project-visual ${p.visual}`}>
-                  {p.image
-                    ? <img src={p.image} alt={p.title} className="project-img" />
-                    : <ProjectMock />
-                  }
-                </div>
-                <div className="project-info">
-                  <div className="project-num">{p.num} · {p.year}</div>
-                  <h3 className="project-title">{p.title}</h3>
+              <div className="project-info">
+                <div className="project-num">{p.num}</div>
+                <h3 className="project-title">{p.title}</h3>
                   <p className="project-desc">{i18n.tc(p.desc)}</p>
                   <div className="project-stack">
                     {p.stack.map((s, j) => <span key={j}>{s}</span>)}
                   </div>
-                  <a href="#" className="project-link" data-cursor="hover">
-                    {t('work.view')}
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
-                      <path d="M5 12h14M13 5l7 7-7 7"/>
-                    </svg>
-                  </a>
+                  {Array.isArray(p.repos) && p.repos.length > 0 && (
+                    <div className="project-links">
+                      {p.repos.map((repo, j) => (
+                        <a key={j} href={repo.url} className="project-link" target="_blank" rel="noopener noreferrer" data-cursor="hover">
+                          {repo.label}
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
+                            <path d="M5 12h14M13 5l7 7-7 7"/>
+                          </svg>
+                        </a>
+                      ))}
+                    </div>
+                  )}
                 </div>
-              </div>
             </article>
           </Reveal>
         ))}

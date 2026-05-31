@@ -126,10 +126,11 @@ window.PORTFOLIO_DATA = {
         "FastAPI",
         "PostgreSQL"
       ],
-      "github": "https://github.com/abet22/OneMore-Frontend",
-      "github_back": "https://github.com/abet22/OneMore-Backend",
-      "visual": "var-1",
-      "year": "2025"
+      "repos": [
+        { "label": "OneMore Frontend", "url": "https://github.com/abet22/OneMore-Frontend" },
+        { "label": "OneMore Backend", "url": "https://github.com/abet22/OneMore-Backend" }
+      ],
+      "visual": "var-1"
     },
     {
       "num": "02",
@@ -143,8 +144,11 @@ window.PORTFOLIO_DATA = {
         "Express",
         "Open Data BCN"
       ],
-      "visual": "var-2",
-      "year": "2024"
+      "repos": [
+        { "label": "NextMove Frontend", "url": "https://github.com/abet22/NextMove-Frontend" },
+        { "label": "NextMove Backend", "url": "https://github.com/abet22/NextMove-Backend" }
+      ],
+      "visual": "var-2"
     },
     {
       "num": "03",
@@ -157,9 +161,10 @@ window.PORTFOLIO_DATA = {
         "Bash",
         "Linux networking"
       ],
-      "github": "https://github.com/abet22/DockerIptables",
-      "visual": "var-3",
-      "year": "2024"
+      "repos": [
+        { "label": "DockerIptables", "url": "https://github.com/abet22/DockerIptables" }
+      ],
+      "visual": "var-3"
     },
     {
       "num": "04",
@@ -170,9 +175,10 @@ window.PORTFOLIO_DATA = {
       "stack": [
         "Python"
       ],
-      "github": "https://github.com/abet22/checking-web-certificates",
-      "visual": "var-4",
-      "year": "2023"
+      "repos": [
+        { "label": "Checking Web Certificates", "url": "https://github.com/abet22/checking-web-certificates" }
+      ],
+      "visual": "var-4"
     }
   ],
   "experience": [
